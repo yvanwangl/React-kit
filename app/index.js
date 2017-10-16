@@ -13,7 +13,7 @@ class App extends Component {
     render(){
         return (
             <div className='hello'>
-                <p>hello world!!!qssssaaasscccccccbbb</p>
+                <p>hello world!!!qsssdfsafd</p>
                 <Home />
                 <Home1 />
                 <img src={indexImage}/>
