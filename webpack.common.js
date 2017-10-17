@@ -22,6 +22,7 @@ module.exports = {
         rules: [
             {
                 test: /\.(js|jsx)$/,
+                include: path.resolve(__dirname, 'app'),
                 use: ['babel-loader']
             },
             {
@@ -54,7 +55,8 @@ module.exports = {
             }
         }),
         new webpack.optimize.CommonsChunkPlugin({
-            name: 'runtime'
+            name: 'runtime',
+            minChunks: Infinity
         })
     ]
 };

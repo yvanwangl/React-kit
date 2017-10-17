@@ -9,7 +9,9 @@
     "build:old": "cross-env NODE_ENV=production webpack -p --color",
     "start": "cross-env NODE_ENV=development webpack-dev-server --hot --color --progress --config webpack.dev.js",
     "build": "cross-env NODE_ENV=production webpack --color --config webpack.prod.js",
-    "watch": "cross-env NODE_ENV=development webpack --progress --watch"
+    "build:dll": "webpack --color --config webpack.dll.js",
+    "watch": "cross-env NODE_ENV=development webpack --progress --watch",
+    "build:ts": "tsc ./app/demo.ts"
   },
   "keywords": [],
   "author": "Yvanwang <https://blog.yvanwang.com>",
@@ -30,6 +32,7 @@
     "style-loader": "^0.19.0"
   },
   "devDependencies": {
+    "add-asset-html-webpack-plugin": "^2.1.2",
     "clean-webpack-plugin": "^0.1.17",
     "cross-env": "^5.0.5",
     "file-loader": "^1.1.5",
