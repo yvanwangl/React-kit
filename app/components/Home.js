@@ -9,7 +9,7 @@ class Home extends Component {
         this.index = 1;
     }
 
-    static fetchData(store){
+    static fetchData({ query, params, store, history }){
         return store.dispatch(fetchBlogs());
     };
 

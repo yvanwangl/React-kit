@@ -14,7 +14,7 @@ const optionConfigDev = {
 };
 
 //部署环境同域请求
-const httpServerProd = '';
+const httpServerProd = 'http://localhost:3000';
 const optionConfigProd = {
 	mode: 'same-origin',
     headers: {

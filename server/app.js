@@ -25,8 +25,8 @@ app.set('views', path.join(__dirname, 'views'));
 
 // define the folder that will be used for static assets
 app.use(Express.static(path.join(__dirname, '../dist')));
-app.get('/blogs', (req, res)=>{
-    res.send({
+app.get('user/:id', (req, res)=>{
+    return res.send({
         blogs: [1,2,3,4]
     });
 });
@@ -51,9 +51,19 @@ app.get('*', (req, res) => {
       let markup;
       if (renderProps) {
         // if the current route matched we have renderProps
-        //console.log(renderProps.components);
+        function getReduxPromise () {
+          let { query, params } = renderProps;
+          let comp = renderProps.components[renderProps.components.length - 1].WrappedComponent;
+          let promise = comp.fetchData ?
+            comp.fetchData({ query, params, store, history:{} }) :
+            Promise.resolve();
+          
+          return promise;
+        }
+        getReduxPromise();
         markup = renderToString(<Provider store={store}><RouterContext {...renderProps}/></Provider>);
-        return res.send(renderFullPage(markup, {blog: {blogs: ['a', 'b', 'c']}}));
+        return res.send(renderFullPage(markup, store.getState()));
+        
       } else {
         // otherwise we can render a 404 page
         markup = renderToString(<NotFoundPage/>);
@@ -79,9 +89,9 @@ function renderFullPage(html, preloadedState) {
             window.__initialState__ = ${JSON.stringify(preloadedState)}
           </script>
           <script type="text/javascript" src="../../dll.vendor.js?7a153e1cad1d9581cb30"></script>
-          <script type="text/javascript" src="../../runtime.45a6834896969a90b459.js"></script>
+          <script type="text/javascript" src="../../runtime.0ad7565a3479d87bbd99.js"></script>
           <script type="text/javascript" src="../../vendor.bc025094f61ca33902b6.js"></script>
-          <script type="text/javascript" src="../../main.8c6b7c3544591584985f.js"></script>
+          <script type="text/javascript" src="../../main.d1aeeab44d18d569fec8.js"></script>
         </body>
       </html>
       `
@@ -90,6 +100,7 @@ function renderFullPage(html, preloadedState) {
 // start the server
 const port = process.env.PORT || 3000;
 const env = process.env.NODE_ENV || 'production';
+
 server.listen(port, err => {
   if (err) {
     return console.error(err);
