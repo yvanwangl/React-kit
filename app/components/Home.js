@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {add} from '../action/blog';
+import {add, fetchBlogs} from '../action/blog';
 
 class Home extends Component {
     constructor(props){
@@ -9,13 +9,22 @@ class Home extends Component {
         this.index = 1;
     }
 
-    add(){
+    static fetchData(store){
+        return store.dispatch(fetchBlogs());
+    };
+
+    add = ()=>{
         let {dispatch} = this.props;
         dispatch({
             type: 'SUCCESS',
             payload: this.index++
         });
     };
+
+    // componentDidMount(){
+    //     let {dispatch} = this.props;
+    //     dispatch(fetchBlogs());
+    // }
 
     render(){
         let {blog} = this.props;

@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import {Provider} from 'react-redux';
-import Home from './components/Home';
-import Home1 from './components/Home1';
-import indexImage from './images/index.png';
+import Root from './container/Root';
 import configStore from './store/index';
 import './index.css';
 
@@ -11,13 +9,14 @@ if(process.env.NODE_ENV == 'production'){
     console.log(process.env.NODE_ENV);
 }
 
-const store = configStore({});
+const initialState = window.__initialState__ || {};
+const store = configStore(initialState);
 
 class App extends Component {
     render(){
         return (
             <Provider store={store}>
-                <Home />
+                <Root />
             </Provider>
         );
     }
