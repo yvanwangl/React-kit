@@ -11,7 +11,7 @@ export function add(value){
 
 export function fetchBlogs(){
     return (dispatch)=>{
-        return request('/blogs', {
+        return request('/api/blogs', {
             method: 'GET'
         }).then(data=> {
             dispatch({
