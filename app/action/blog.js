@@ -11,13 +11,14 @@ export function add(value){
 
 export function fetchBlogs(){
     return (dispatch)=>{
-        request('/blogs', {
+        return request('/blogs', {
             method: 'GET'
         }).then(data=> {
             dispatch({
                 type: SUCCESS,
                 payload: data.blogs
-            })
+            });
+            return data;
         })
     };
 }

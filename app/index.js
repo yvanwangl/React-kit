@@ -8,6 +8,7 @@ import './index.css';
 if(process.env.NODE_ENV == 'production'){
     console.log(process.env.NODE_ENV);
 }
+console.log(window.__initialState__);
 
 const initialState = window.__initialState__ || {};
 const store = configStore(initialState);

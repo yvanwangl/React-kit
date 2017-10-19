@@ -1,6 +1,7 @@
 'use strict';
 
 import path from 'path';
+import fs from 'mz/fs';
 import { Server } from 'http';
 import Express from 'express';
 import React from 'react';
@@ -25,11 +26,19 @@ app.set('views', path.join(__dirname, 'views'));
 
 // define the folder that will be used for static assets
 app.use(Express.static(path.join(__dirname, '../dist')));
-app.get('user/:id', (req, res)=>{
-    return res.send({
-        blogs: [1,2,3,4]
-    });
+app.get('/blogs', (req, res) => {
+
+  return res.send({
+    blogs: ['cheng', 'gong', 'la!', 'hahahaha']
+  });
 });
+
+
+app.get('/favicon.ico', (req, res)=>{
+  res.send({
+    success: true
+  });
+})
 
 // universal routing and rendering
 app.get('*', (req, res) => {
@@ -51,33 +60,41 @@ app.get('*', (req, res) => {
       let markup;
       if (renderProps) {
         // if the current route matched we have renderProps
-        function getReduxPromise () {
+        function getReduxPromise() {
           let { query, params } = renderProps;
           let comp = renderProps.components[renderProps.components.length - 1].WrappedComponent;
-          let promise = comp.fetchData ?
-            comp.fetchData({ query, params, store, history:{} }) :
+          let promise = comp && comp.fetchData ?
+            comp.fetchData({ query, params, store, history: {} }) :
             Promise.resolve();
-          
+
           return promise;
         }
-        getReduxPromise();
-        markup = renderToString(<Provider store={store}><RouterContext {...renderProps}/></Provider>);
-        return res.send(renderFullPage(markup, store.getState()));
+        getReduxPromise().then(data=> {
+          let srcs = [];
+          fs.readFileSync(path.resolve(__dirname, '../dist/index.html'), 'utf-8').replace(/src="([\w\?\.]+)">/g, (match, src)=> {
+            srcs.push(src);
+          })
+          markup = renderToString(<Provider store={store}><RouterContext {...renderProps} /></Provider>);
+          res.send(renderFullPage(markup, store.getState(), srcs));
+          //return res.render('index', {markup, reduxState: store.getState(), scriptSrcs: srcs});
+        });
         
+
       } else {
         // otherwise we can render a 404 page
-        markup = renderToString(<NotFoundPage/>);
+        markup = renderToString(<NotFoundPage />);
         res.status(404);
       }
 
       // render the index template with the embedded React markup
-      return res.render('index', { markup });
+      //return res.render('index', { markup });
     }
   );
 });
 
-function renderFullPage(html, preloadedState) {
-    return `
+function renderFullPage(html, preloadedState, scriptSrcs) {
+  let scripts = scriptSrcs.map(src=> `<script type="text/javascript" src="../../${src}"></script>`).join('');
+  return `
       <!doctype html>
       <html>
         <head>
@@ -88,14 +105,11 @@ function renderFullPage(html, preloadedState) {
           <script>
             window.__initialState__ = ${JSON.stringify(preloadedState)}
           </script>
-          <script type="text/javascript" src="../../dll.vendor.js?7a153e1cad1d9581cb30"></script>
-          <script type="text/javascript" src="../../runtime.0ad7565a3479d87bbd99.js"></script>
-          <script type="text/javascript" src="../../vendor.bc025094f61ca33902b6.js"></script>
-          <script type="text/javascript" src="../../main.d1aeeab44d18d569fec8.js"></script>
+          ${scripts}
         </body>
       </html>
       `
-  }
+}
 
 // start the server
 const port = process.env.PORT || 3000;

@@ -5,7 +5,7 @@ export default class IndexPage extends Component {
     render(){
         return (
             <div>
-                <Link to='/user'>user</Link>
+                <Link to='/user/3'>user</Link>
             </div>
         );
     }

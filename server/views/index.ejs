@@ -4,21 +4,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Judo Heroes - A Universal JavaScript demo application with React</title>
-    <link rel="stylesheet" href="/css/style.css">
   </head>
   <body>
     <div id="root"><%- markup -%></div>
-    <div><%- data %></div>
     <div id="abar">
       <a href="https://nodejsdesignpatterns.com" target="_blank">Want to know more about Node.js, React and Universal Javascript?</a>
     </div>
-    <script>
-      <%- data %>
-      
+    <script type="text/javascript" charset="utf-8">
+      window.__initialState__ = '<%= reduxState %>';
     </script>
-    <script type="text/javascript" src="../../dll.vendor.js?7a153e1cad1d9581cb30"></script>
-    <script type="text/javascript" src="../../runtime.97198af0bf67c55ba20c.js"></script>
-    <script type="text/javascript" src="../../vendor.bc025094f61ca33902b6.js"></script>
-    <script type="text/javascript" src="../../main.ad716df115394e803e17.js"></script>
+
+    <% scriptSrcs.forEach(function(src){ %>
+      <script src="../../<%= src %>"></script>
+    <% }) %>
   </body>
 </html>
