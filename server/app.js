@@ -34,7 +34,7 @@ app.get('/blogs', (req, res) => {
 });
 
 
-app.get('/favicon.ico', (req, res)=>{
+app.get('/favicon.ico', (req, res) => {
   res.send({
     success: true
   });
@@ -69,16 +69,16 @@ app.get('*', (req, res) => {
 
           return promise;
         }
-        getReduxPromise().then(data=> {
+        getReduxPromise().then(data => {
           let srcs = [];
-          fs.readFileSync(path.resolve(__dirname, '../dist/index.html'), 'utf-8').replace(/src="([\w\?\.]+)">/g, (match, src)=> {
+          fs.readFileSync(path.resolve(__dirname, '../dist/index.html'), 'utf-8').replace(/src="([\w\?\.]+)">/g, (match, src) => {
             srcs.push(src);
           })
           markup = renderToString(<Provider store={store}><RouterContext {...renderProps} /></Provider>);
           res.send(renderFullPage(markup, store.getState(), srcs));
           //return res.render('index', {markup, reduxState: store.getState(), scriptSrcs: srcs});
         });
-        
+
 
       } else {
         // otherwise we can render a 404 page
@@ -93,7 +93,7 @@ app.get('*', (req, res) => {
 });
 
 function renderFullPage(html, preloadedState, scriptSrcs) {
-  let scripts = scriptSrcs.map(src=> `<script type="text/javascript" src="../../${src}"></script>`).join('');
+  let scripts = scriptSrcs.map(src => `<script type="text/javascript" src="../../${src}"></script>`).join('');
   return `
       <!doctype html>
       <html>
