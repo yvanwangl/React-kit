@@ -13,6 +13,7 @@
     "watch": "cross-env NODE_ENV=development webpack --progress --watch",
     "build:ts": "tsc ./app/demo.ts",
     "start:server": "cross-env NODE_ENV=production nodemon server/app.js --exec babel-node",
+    "start:server:debug": "cross-env NODE_ENV=production nodemon --inspect=9119 server/app.js --exec babel-node",
     "start:api": "cross-env NODE_ENV=production nodemon server/api/server.js --exec babel-node"
   },
   "keywords": [],
