@@ -21,11 +21,6 @@ class Home extends Component {
         });
     };
 
-    // componentDidMount(){
-    //     let {dispatch} = this.props;
-    //     dispatch(fetchBlogs());
-    // }
-
     render(){
         let {blog} = this.props;
         return (
